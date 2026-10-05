@@ -1,0 +1,942 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://tranquan.github.io/blog/articles/async-ai-agent-workflows-with-issue-trackers/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Running AI coding agents through an issue tracker - Quan Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#running-ai-coding-agents-through-an-issue-tracker" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Quan Notes" class="md-header__button md-logo" aria-label="Quan Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Quan Notes
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Running AI coding agents through an issue tracker
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../blog/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Blog
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Articles
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../collections/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Collections
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../notes/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Notes
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Quan Notes" class="md-nav__button md-logo" aria-label="Quan Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Quan Notes
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../blog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Articles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../collections/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Collections
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The loop
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-choose-where-the-conversation-lives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Choose where the conversation lives
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-write-the-issue-as-a-prompt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Write the issue as a prompt
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3-put-checkpoints-where-they-pay-off" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Put checkpoints where they pay off
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4-give-each-task-its-own-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: Give each task its own memory
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-5-wire-the-feedback-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5: Wire the feedback loop
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-6-lock-it-down" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 6: Lock it down
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#build-or-adopt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Build or adopt?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#where-the-evidence-is-thin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where the evidence is thin
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sources
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  <nav class="md-tags" >
+    
+      
+      
+      
+      
+        <span class="md-tag">ai-agents</span>
+      
+    
+      
+      
+      
+      
+        <span class="md-tag">github</span>
+      
+    
+      
+      
+      
+      
+        <span class="md-tag">workflow</span>
+      
+    
+  </nav>
+
+
+
+<h1 id="running-ai-coding-agents-through-an-issue-tracker">Running AI coding agents through an issue tracker</h1>
+<p><em>Last updated: 2026-10-06</em></p>
+<p>This guide shows how to work with AI coding agents the way you work with a teammate on GitHub, Linear or Jira. You assign a task, the agent works on its own, you review now and then, you leave comments, and it picks them up and continues. It is for software engineers who have used an agent in their editor but not yet asynchronously, and it covers which tools do this today, where task memory lives, how comments reach the agent, where to put review checkpoints, and whether to build or buy.</p>
+<h2 id="the-loop">The loop</h2>
+<p>Every setup in this guide follows the same loop:</p>
+<ol>
+<li><strong>Assign:</strong> you turn a task into an issue and hand it to the agent (assignee, label or <code>@mention</code>).</li>
+<li><strong>Plan (optional):</strong> the agent proposes a plan and you approve or correct it.</li>
+<li><strong>Work:</strong> the agent works on a branch, unattended, and records progress.</li>
+<li><strong>Review:</strong> the agent opens a pull request (PR) with evidence that it works. You review.</li>
+<li><strong>Feedback:</strong> you comment. The agent reads the comments, pushes fixes and reports back.</li>
+<li><strong>Merge:</strong> a human merges.</li>
+</ol>
+<p>The ticket is the unit of work, and the thread on it (issue, PR or agent session) is where you and the agent talk. The steps below fill in each part.</p>
+<h2 id="step-1-choose-where-the-conversation-lives">Step 1: Choose where the conversation lives</h2>
+<p>The tools differ less in <em>whether</em> they can take a ticket and more in <em>where</em> you steer them afterwards. On GitHub, Copilot treats the issue as a hand-off only: once it is assigned, it will ignore later issue comments, and the conversation moves to the PR. (<a href="https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/use-cloud-agent-on-github#:~:text=Copilot%20will%20not%20be%20aware%20of%2C%20and%20therefore">Using GitHub Copilot cloud agent on GitHub</a>)</p>
+<table>
+<thead>
+<tr>
+<th>Tool (name as of 2026-10-06)</th>
+<th>How you assign</th>
+<th>Where you steer it</th>
+<th>What you get</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GitHub Copilot cloud agent (formerly "coding agent")</td>
+<td>Assign a GitHub issue to Copilot; also from Linear, Jira, Slack</td>
+<td><code>@copilot</code> comments on the <strong>PR</strong></td>
+<td>Draft PR; one PR per task</td>
+</tr>
+<tr>
+<td>Claude Code GitHub Actions (<code>claude-code-action</code>)</td>
+<td><code>@claude</code> comment; optional assignee or label trigger</td>
+<td>New <code>@claude</code> comments on the issue or PR</td>
+<td>Commits on a <code>claude/</code> branch or the PR branch</td>
+</tr>
+<tr>
+<td>Claude Code on the web</td>
+<td>Prompt at claude.ai/code, CLI, mobile</td>
+<td>The cloud session; auto-fix reacts to PR comments and CI</td>
+<td>Branch, then a PR</td>
+</tr>
+<tr>
+<td>Claude Agent for Jira (beta)</td>
+<td>Assign or <code>@mention</code> on a Jira work item</td>
+<td>New <code>@mention</code> starts a new session</td>
+<td>Draft GitHub PR</td>
+</tr>
+<tr>
+<td>Cursor Cloud Agents (formerly background agents)</td>
+<td>Delegate a Linear issue; <code>@cursor</code> on GitHub issues/PRs, Slack</td>
+<td><code>@Cursor</code> comment or reply in the Linear agent session</td>
+<td>PR created automatically</td>
+</tr>
+<tr>
+<td>Devin</td>
+<td>Assign in Linear or Jira, label, <code>@mention</code>; <code>/devin</code> on a PR</td>
+<td>Linear agent session, Jira panel, or comments on its own PRs</td>
+<td>PR linked on the ticket</td>
+</tr>
+<tr>
+<td>Jira Coding Agent (Atlassian)</td>
+<td>Assign a work item or "Start work"</td>
+<td>Chat panel in the agent session (not plain comments)</td>
+<td>Draft PR (optional)</td>
+</tr>
+<tr>
+<td>OpenAI Codex</td>
+<td>Assign or <code>@Codex</code> in Linear; <code>@codex</code> on GitHub PRs</td>
+<td>Follow-up in the Linear thread; <code>@codex fix …</code> on a PR</td>
+<td>Summary and a chat link you turn into a PR; fixes pushed to the PR branch</td>
+</tr>
+</tbody>
+</table>
+<p>Product names changed a lot in 2025–2026, so date any comparison you rely on. GitHub now calls its agent "Copilot cloud agent", which plans and implements changes in the background. (<a href="https://docs.github.com/en/copilot/concepts/copilot-surfaces/copilot-on-github#:~:text=Copilot%20cloud%20agent%20can%20research%20a%20repository%2C%20plan%20changes">GitHub Copilot on GitHub.com</a>) Cursor renamed background agents to Cloud Agents, which work on their own branch and hand off by pushing. (<a href="https://cursor.com/docs/cloud-agent#:~:text=work%20on%20a%20separate%20branch%2C%20then%20push%20changes%20to%20your">Cloud Agents - Cursor</a>)</p>
+<p><strong>GitHub-native.</strong> Assigning an issue to Copilot gets you a draft PR and a review request when it finishes. (<a href="https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/use-cloud-agent-on-github#:~:text=raise%20a%20pull%20request%2C%20then%20request%20a%20review%20from%20you">Using GitHub Copilot cloud agent on GitHub</a>) With Claude Code GitHub Actions, you mention <code>@claude</code> in an issue or PR, and it can implement changes and push commits on your own Actions runners. (<a href="https://code.claude.com/docs/en/github-actions#:~:text=to%20have%20Claude%20analyze%20code%2C%20implement%20changes%2C%20and%20push%20commits">Claude Code GitHub Actions</a>) The action can also start when an issue is assigned to a chosen user or gets a chosen label, which is the closest match to "assign the ticket to the agent". (<a href="https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md#:~:text=The%20label%20name%20that%20triggers%20the%20action%20when%20applied">claude-code-action usage</a>)</p>
+<p><strong>Linear-centred.</strong> Linear treats agents as app users: assigning an issue to an agent <em>delegates</em> it, while a human stays the owner. (<a href="https://linear.app/docs/agents-in-linear#:~:text=Assigning%20an%20issue%20to%20an%20agent%20delegates%20the%20issue%20to">Agents in Linear</a>) Cursor, Devin, Codex and Copilot all plug into this model. Cursor shows live status in Linear and opens a PR when done, (<a href="https://cursor.com/docs/integrations/linear#:~:text=show%20real%2Dtime%20status%20in%20Linear%20and%20create%20PRs%20automatically">Linear - Cursor Docs</a>) and Devin takes extra instructions as messages in the Linear agent session. (<a href="https://docs.devin.ai/integrations/linear#:~:text=Send%20messages%20in%20the%20agent%20session%20thread%20to%20give%20Devin">Linear - Devin Docs</a>) Codex is different: it continues the same chat when you reply in the thread, but it gives you a link to create the PR rather than opening it. (<a href="https://learn.chatgpt.com/docs/third-party/linear#:~:text=follow%20up%20in%20the%20thread%20to%20continue%20the%20same%20chat.">Run Codex chats from Linear issues</a>)</p>
+<p><strong>Jira-centred.</strong> Jira lets you assign work items to AI agents and trigger them as work moves through your workflow. (<a href="https://support.atlassian.com/jira-software-cloud/docs/collaborate-on-work-items-with-ai-agents/#:~:text=trigger%20the%20agent%20as%20work%20moves%20through%20your%20workflow">Collaborate on work items with AI agents - Jira</a>) Its output stays private in an Agents section until you publish it as a comment, which differs from GitHub and Linear where agent activity is visible to everyone. (<a href="https://support.atlassian.com/jira-software-cloud/docs/collaborate-on-work-items-with-ai-agents/#:~:text=provides%20an%20output%20for%20you%20to%20review%20in%20the%20Agents">Collaborate on work items with AI agents - Jira</a>) Atlassian's own Jira Coding Agent can always open a draft PR, but you iterate in its chat panel, not in ordinary comments. (<a href="https://support.atlassian.com/jira-software-cloud/docs/generate-code-from-a-work-item-in-jira/#:~:text=It%20will%20always%20create%20a%20draft%20pull%20request%20on%20your">Generate code from a work item in Jira</a>) There is also a beta Claude Agent for Jira, built on Anthropic's Claude Managed Agents, that pushes changes and opens a draft PR. (<a href="https://support.atlassian.com/jira-software-cloud/docs/set-up-claude-agent-for-jira/#:~:text=push%20changes%20to%20your%20GitHub%20repo%20and%20open%20a%20draft">Set up Claude Agent for Jira</a>)</p>
+<p><strong>How to choose:</strong> if your team lives in GitHub, use Copilot or <code>claude-code-action</code> and treat the PR as the conversation. If your team plans in Linear, its agent sessions give the cleanest "comment on the ticket and the agent continues" experience, and you can pick the agent behind it. Jira works, but steering happens in side panels rather than the comment thread.</p>
+<h2 id="step-2-write-the-issue-as-a-prompt">Step 2: Write the issue as a prompt</h2>
+<p>The issue is the agent's prompt, so most of your effort should go there, not into watching the run. GitHub says its agent gives better results on clear, well-scoped tasks, and asks for a problem description, acceptance criteria and the files to change. (<a href="https://docs.github.com/en/copilot/tutorials/coding-agent/get-the-best-results#:~:text=provides%20better%20results%20when%20assigned%20clear%2C%20well%2Dscoped%20tasks.">Get the best results from Copilot cloud agent</a>) Anthropic's Claude Code guide says the same thing more bluntly. (<a href="https://code.claude.com/docs/en/best-practices#:~:text=Time%20spent%20making%20the%20spec%20precise%20pays%20off%20more%20than">Best practices for Claude Code</a>)</p>
+<p>A good agent issue has:</p>
+<ul>
+<li><strong>The problem</strong>, and why it matters.</li>
+<li><strong>Acceptance criteria</strong>: what "done" looks like, including tests.</li>
+<li><strong>Where to look</strong>: files, modules or interfaces to change.</li>
+<li><strong>Out of scope</strong>: what not to touch.</li>
+<li><strong>How to verify</strong>: the command, test or screenshot that proves it works.</li>
+<li><strong>Boundaries</strong>: what the agent must always do, must ask about first, and must never do.</li>
+</ul>
+<p>The last item comes from Addy Osmani, who suggests three tiers of rules, such as "always run tests before commits", "ask before adding new dependencies" and "never remove a failing test without approval". (<a href="https://addyosmani.com/blog/good-spec/#:~:text=review%20and%20refine%20the%20AI%E2%80%99s%20spec.">How to write a good spec for AI agents</a>) The "ask first" tier gives you checkpoints you agreed in advance, so the agent stops at them instead of guessing.</p>
+<p>Not every task should go to an agent. GitHub suggests starting with bugs, UI tweaks, tests, docs and tech debt, and keeping broad, ambiguous, security-sensitive and learning tasks with humans. (<a href="https://docs.github.com/en/copilot/tutorials/coding-agent/get-the-best-results#:~:text=Initially%2C%20you%20might%20want%20to%20start%20by%20giving%20Copilot%20simpler">Get the best results from Copilot cloud agent</a>)</p>
+<h2 id="step-3-put-checkpoints-where-they-pay-off">Step 3: Put checkpoints where they pay off</h2>
+<p>You want to review "some of the time". The sources agree on two checkpoints: approve a plan before code is written, and review the PR before merge.</p>
+<p><strong>The plan checkpoint.</strong> Claude Code's recommended workflow separates exploring and planning from implementing, so you don't solve the wrong problem. (<a href="https://code.claude.com/docs/en/best-practices#:~:text=Separate%20research%20and%20planning%20from%20implementation%20to%20avoid%20solving">Best practices for Claude Code</a>) In plan mode, edits stay blocked until you approve, and this still applies in headless and SDK runs, so you can use it as a gate in async setups. (<a href="https://code.claude.com/docs/en/permission-modes#:~:text=edits%20stay%20blocked%20until%20you%20approve%20the%20plan">Choose a permission mode</a>) Copilot has a similar flow where you iterate on a plan and only then create a PR, (<a href="https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/research-plan-iterate#:~:text=Review%20the%20plan%20and%20iterate%20with%20Copilot%20until%20it%20matches">Research, plan, and iterate with Copilot cloud agent</a>) and OpenAI advises asking Codex to plan first when a task is complex or ambiguous. (<a href="https://learn.chatgpt.com/guides/best-practices#:~:text=ask%20Codex%20to%20plan%20before%20it%20starts%20coding.">Codex best practices</a>) Skip the plan for small tasks. Anthropic's rule of thumb is short. (<a href="https://code.claude.com/docs/en/best-practices#:~:text=If%20you%20could%20describe%20the%20diff%20in%20one%20sentence%2C%20skip">Best practices for Claude Code</a>)</p>
+<p><strong>The PR checkpoint.</strong> This is the gate that can't be skipped. Copilot enforces it in the product: its draft PRs must be reviewed and merged by a human. (<a href="https://docs.github.com/en/copilot/concepts/security-governance-and-network-settings/risks-and-mitigations#:~:text=Draft%20pull%20requests%20created%20by%20Copilot%20cloud%20agent%20must">Risks and mitigations for Copilot cloud agent</a>) Anthropic's guidance for agents in general is that human review stays crucial even when tests pass, and that agents should pause at checkpoints or blockers. (<a href="https://www.anthropic.com/engineering/building-effective-agents#:~:text=pause%20for%20human%20feedback%20at%20checkpoints%20or%20when%20encountering%20blockers.">Building effective agents</a>)</p>
+<p><strong>What lets you look less often.</strong> Two things.</p>
+<ol>
+<li><strong>A check the agent can run itself.</strong> With tests, a build or a screenshot to check against, the agent can fix its own mistakes. Without one, you become the loop. Anthropic calls this the difference between a session you watch and one you walk away from. (<a href="https://code.claude.com/docs/en/best-practices#:~:text=the%20difference%20between%20a%20session%20you%20watch%20and%20one">Best practices for Claude Code</a>) Ask the agent to post the evidence (test output, screenshots) in the PR, since reviewing evidence is faster than re-running it.</li>
+<li><strong>An AI first-pass review.</strong> The longer an agent works alone, the more an independent check matters, for example a reviewer subagent with fresh context. (<a href="https://code.claude.com/docs/en/best-practices#:~:text=The%20longer%20Claude%20works%20unattended%2C%20the%20more%20an%20independent%20check">Best practices for Claude Code</a>) Osmani puts it this way: use AI as the first-pass reviewer, not the final judge, and require tests or a demo on every PR. (<a href="https://addyosmani.com/blog/code-review-ai/#:~:text=Use%20AI%20as%20first%2Dpass%20reviewer%2C%20not%20final%20arbiter.">AI writes code faster. Your job is still to prove it works.</a>)</li>
+</ol>
+<p><strong>How much autonomy that is.</strong> In the five-level framework by Feng, McDonald and Zhang, this setup sits around levels 3 and 4: the agent plans and works over long stretches and comes back mainly for blockers. The authors stress that more autonomy is a design choice, not automatically better. (<a href="https://knightcolumbia.org/content/levels-of-autonomy-for-ai-agents-1#:~:text=more%20autonomy%20does%20not%20simply%20mean%20a%20better%20agent.">Levels of Autonomy for AI Agents</a>) Anthropic's usage data points the same way: good oversight means being able to step in when it matters, not approving every action. (<a href="https://www.anthropic.com/research/measuring-agent-autonomy#:~:text=Effective%20oversight%20of%20agents%20requires%20more%20than%20putting%20a%20human">Measuring AI agent autonomy in practice</a>)</p>
+<p><strong>Your real bottleneck is review.</strong> Simon Willison notes that with parallel agents, review speed is the limit, and that code that started from your own spec is much cheaper to review. (<a href="https://simonwillison.net/2025/Oct/5/parallel-coding-agents/#:~:text=Code%20that%20started%20from%20your%20own%20specification%20is%20a%20lot">Embracing the parallel coding agent lifestyle</a>) Keep tasks PR-sized. Copilot enforces this anyway: one PR per task and at most 59 minutes per session. (<a href="https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-cloud-agent#:~:text=Each%20Copilot%20cloud%20agent%20session%20has%20a%20maximum%20execution%20time">About Copilot cloud agent</a>)</p>
+<h2 id="step-4-give-each-task-its-own-memory">Step 4: Give each task its own memory</h2>
+<p>No product documents a "notes" field on the ticket itself. Instead, memory is split in two:</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>What it holds</th>
+<th>Where it lives</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Project memory</strong></td>
+<td>Conventions, commands, architecture</td>
+<td><code>AGENTS.md</code>, <code>CLAUDE.md</code>, <code>.github/copilot-instructions.md</code>, Cursor rules</td>
+</tr>
+<tr>
+<td><strong>Task memory</strong></td>
+<td>Plan, progress, decisions, open questions</td>
+<td>The PR or issue thread, the agent session, or a per-task progress file on the branch</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Project memory</strong> is a set of files the agent reads at the start of every run. AGENTS.md is a tool-neutral version that many agents support. (<a href="https://agents.md/#:~:text=Think%20of%20AGENTS.md%20as%20a%20README%20for%20agents">AGENTS.md</a>) Claude Code also keeps an auto memory that it writes itself, but both kinds are per project, and each session still starts with a fresh context. (<a href="https://code.claude.com/docs/en/memory#:~:text=Each%20Claude%20Code%20session%20begins%20with%20a%20fresh%20context%20window.">How Claude remembers your project</a>)</p>
+<p><strong>Task memory</strong> depends on the tool:</p>
+<ul>
+<li><strong>Copilot:</strong> the PR is the memory. It remembers context from earlier sessions on the same PR, (<a href="https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/make-changes-to-an-existing-pr#:~:text=Copilot%20remembers%20context%20from%20previous%20sessions%20on%20the%20same%20pull">Asking Copilot to make changes to an existing pull request</a>) and every commit links to its session log.</li>
+<li><strong>Claude Code GitHub Actions:</strong> Claude keeps one comment on the issue or PR and updates it as it works, with checkboxes for progress. (<a href="https://code.claude.com/docs/en/github-actions#:~:text=Claude%20replies%20in%20a%20comment%20on%20the%20same%20issue%20or">Claude Code GitHub Actions</a>) (<a href="https://github.com/anthropics/claude-code-action#:~:text=Visual%20progress%20indicators%20with%20checkboxes%20that%20dynamically%20update">anthropics/claude-code-action</a>)</li>
+<li><strong>Linear:</strong> the agent session on the issue holds the activity log, and Devin syncs its to-do list to Linear's plan view.</li>
+</ul>
+<p>If you build your own setup, copy Anthropic's pattern for long-running agents. Keep a progress file plus git history, and have every session start by reading them. (<a href="https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents#:~:text=Read%20the%20git%20logs%20and%20progress%20files%20to%20get%20up">Effective harnesses for long-running agents</a>) End each session in a clean state, so the next session, or you, can pick it up. (<a href="https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents#:~:text=leaving%20the%20environment%20in%20a%20clean%20state%20at%20the%20end">Effective harnesses for long-running agents</a>) Keep the task checklist in JSON rather than Markdown, because the model is less likely to overwrite it carelessly. (<a href="https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents#:~:text=less%20likely%20to%20inappropriately%20change%20or%20overwrite%20JSON%20files">Effective harnesses for long-running agents</a>) Anthropic calls this "structured note-taking": notes written outside the context window and read back later. (<a href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents#:~:text=the%20agent%20regularly%20writes%20notes%20persisted%20to%20memory%20outside">Effective context engineering for AI agents</a>) The Claude API's memory tool does this as a file store you control, so you can map it to one folder per issue. (<a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/memory-tool#:~:text=Claude%20automatically%20checks%20its%20memory%20directory%20before%20starting%20a">Memory tool - Claude API</a>)</p>
+<p>A practical layout for a self-built setup: one branch per issue, and on it a <code>.agent/notes/&lt;issue&gt;.md</code> progress log and a <code>.agent/tasks/&lt;issue&gt;.json</code> checklist. Plus the thread itself. The agent reads all three at the start of each run and updates them before it hands back.</p>
+<h2 id="step-5-wire-the-feedback-loop">Step 5: Wire the feedback loop</h2>
+<p>This is the part that surprises people. In most setups the agent does <strong>not</strong> pick up exactly where it stopped. Each comment starts a new run, which rebuilds its context from the thread and the branch.</p>
+<p><strong>How Claude Code GitHub Actions does it.</strong> The reference workflow listens to issue comments, PR review comments, issue events (opened, assigned, labeled) and submitted reviews. Every new run fetches the whole PR or issue, including comments. (<a href="https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md#:~:text=Claude%20will%20see%20the%20full%20PR%20context%2C%20including%20any%20comments.">claude-code-action usage</a>) It doesn't resume the earlier session in memory. The action does output a session ID for <code>--resume</code>, but on fresh CI runners the session files are gone, because headless sessions are stored on the machine. (<a href="https://code.claude.com/docs/en/headless#:~:text=with%20a%20session%20ID%20to%20continue%20a%20specific%20conversation">Run Claude Code programmatically</a>) So the thread and the branch are your memory.</p>
+<p>Watch for these four limits:</p>
+<ol>
+<li><strong>Comments added during a run are skipped.</strong> The action drops comments made after the trigger, to block content injected after an authorised request. (<a href="https://github.com/anthropics/claude-code-action/blob/main/src/github/data/fetcher.ts#:~:text=Filters%20comments%20to%20only%20include%20those%20that%20existed%20in%20their">claude-code-action fetcher.ts</a>) Mention <code>@claude</code> again to start a new run.</li>
+<li><strong>Bot comments don't wake it.</strong> Events created with the workflow's own <code>GITHUB_TOKEN</code> don't start new workflow runs, so another workflow can't post "@claude" to chain runs unless it uses an app token. (<a href="https://github.com/anthropics/claude-code-action/blob/main/docs/faq.md#:~:text=cannot%20trigger%20subsequent%20GitHub%20Actions%20workflows">claude-code-action FAQ</a>)</li>
+<li><strong>New workflows only fire from the default branch.</strong> An <code>issue_comment</code> workflow does nothing until it is merged to <code>main</code>. (<a href="https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#:~:text=This%20event%20will%20only%20trigger%20a%20workflow%20run%20if%20the">Events that trigger workflows</a>)</li>
+<li><strong>Concurrency choices drop or race runs.</strong> With no concurrency group, two quick comments start two runs that may fight over one branch. With a group, GitHub keeps at most one run pending and cancels older pending runs, so a comment can be lost. (<a href="https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/control-workflow-concurrency#:~:text=there%20can%20be%20at%20most%20one%20running%20job%20or%20workflow">Control the concurrency of workflows and jobs</a>) Pick one deliberately. A group per issue or PR is usually right, as long as people batch their comments.</li>
+</ol>
+<p><strong>How Copilot does it.</strong> Each <code>@copilot</code> comment on the PR starts a new session, which carries over context from earlier sessions on that PR. (<a href="https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/make-changes-to-an-existing-pr#:~:text=Copilot%20remembers%20context%20from%20previous%20sessions%20on%20the%20same%20pull">Asking Copilot to make changes to an existing pull request</a>) Only people with write access are heard. (<a href="https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/make-changes-to-an-existing-pr#:~:text=Copilot%20only%20responds%20to%20comments%20from%20people%20who%20have%20write">Asking Copilot to make changes to an existing pull request</a>) Batch your review: Copilot starts on each comment as soon as you submit it, so use "Start a review" rather than single comments. You can also send several review comments to it with "Add to batch". (<a href="https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/make-changes-to-an-existing-pr#:~:text=To%20delegate%20multiple%20comments%2C%20click">Asking Copilot to make changes to an existing pull request</a>)</p>
+<p><strong>How Linear does it.</strong> Linear is the closest to a real resume. A follow-up from you arrives as a <code>prompted</code> webhook on the <em>same</em> agent session, and the agent is expected to add it to its existing history. (<a href="https://linear.app/developers/agent-interaction#:~:text=A%20user%20sent%20a%20new%20message%20into%20an%20existing%20Agent">Developing the Agent Interaction - Linear</a>) The integrator has to keep that history, and Linear's deadlines are tight. Your webhook must answer within 5 seconds, so acknowledge at once and do the work in a queue. (<a href="https://linear.app/developers/agent-interaction#:~:text=You%20must%20return%20a%20response%20from%20your%20webhook%20receiver%20within">Developing the Agent Interaction - Linear</a>) You can also send a stop signal to halt the agent mid-task. (<a href="https://linear.app/developers/agent-signals#:~:text=The%20stop%20signal%20instructs%20the%20agent%20to%20halt%20work%20immediately.">Signals - Linear</a>)</p>
+<p><strong>Claude Code on the web</strong> has an auto-fix mode that watches a PR and responds to CI failures and review comments. If a comment is ambiguous or architecturally significant, it asks you before acting. (<a href="https://code.claude.com/docs/en/claude-code-on-the-web#:~:text=Claude%20can%20watch%20a%20pull%20request%20and%20automatically%20respond%20to">Use Claude Code in the cloud</a>)</p>
+<h2 id="step-6-lock-it-down">Step 6: Lock it down</h2>
+<p>Issue and comment text is untrusted input, and an agent that reads it holds repo credentials. Simon Willison's "lethal trifecta" is the risk to keep in mind: private data, untrusted content and a way to send data out. (<a href="https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/#:~:text=Exposure%20to%20untrusted%20content">The lethal trifecta for AI agents</a>) It has happened: a malicious public GitHub issue hijacked an agent into leaking private repo data through a PR. (<a href="https://invariantlabs.ai/blog/mcp-github-vulnerability#:~:text=agent%20via%20a%20malicious%20GitHub%20Issue">GitHub MCP Exploited</a>)</p>
+<p>The checklist:</p>
+<ul>
+<li><strong>Limit who can trigger the agent.</strong> Both Copilot and <code>claude-code-action</code> accept only users with write access by default. (<a href="https://github.com/anthropics/claude-code-action/blob/main/docs/security.md#:~:text=The%20action%20can%20only%20be%20triggered%20by%20users%20with%20write">claude-code-action security</a>) Copilot goes further: comments from users without write access never reach the agent. (<a href="https://docs.github.com/en/copilot/concepts/security-governance-and-network-settings/risks-and-mitigations#:~:text=Comments%20from%20users%20without%20write%20access%20are%20never%20presented%20to">Risks and mitigations for Copilot cloud agent</a>) Be careful with <code>claude-code-action</code>'s escape hatches. Allowed bots skip the permission check entirely. (<a href="https://github.com/anthropics/claude-code-action/blob/main/docs/security.md#:~:text=Allowed%20bots%20are%20not%20checked%20for%20repository%20permissions">claude-code-action security</a>)</li>
+<li><strong>Limit network access.</strong> Copilot has a default-on firewall, but it covers only commands the agent runs through its Bash tool. (<a href="https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-the-firewall#:~:text=The%20firewall%20only%20applies%20to%20processes%20started%20by%20the%20agent">Customizing the firewall for Copilot cloud agent</a>) <code>claude-code-action</code> has no built-in firewall, so set up Claude Code's sandbox with an allowlist of domains yourself. (<a href="https://code.claude.com/docs/en/sandboxing#:~:text=checks%20each%20host%20against%20your%20allowed%20domains">Sandboxing - Claude Code</a>)</li>
+<li><strong>Use short-lived tokens with least privilege.</strong> Prefer a custom GitHub App over the shared official one if you want the smallest set of permissions. Store keys as secrets, give the workflow only the permissions it needs, and review before merging. (<a href="https://code.claude.com/docs/en/github-actions#:~:text=Grant%20the%20workflow%20only%20the%20permissions%20it%20needs%2C%20and%20review">Claude Code GitHub Actions</a>)</li>
+<li><strong>Make human review a platform rule, not a habit.</strong> Copilot enforces draft PRs, blocks the requester from approving, and holds CI until a human approves. With <code>claude-code-action</code>, Claude doesn't open PRs on its own, (<a href="https://github.com/anthropics/claude-code-action/blob/main/docs/security.md#:~:text=Claude%20does%20not%20create%20pull%20requests%20automatically">claude-code-action security</a>) but its "own branch only, no force-push" limits are instructions in its system prompt, not platform controls. (<a href="https://github.com/anthropics/claude-code-action/blob/main/docs/faq.md">claude-code-action FAQ</a>) Add branch protection and required reviews yourself.</li>
+</ul>
+<h2 id="build-or-adopt">Build or adopt?</h2>
+<p><strong>Adopt</strong> (Copilot, Cursor, Devin, Codex, Jira agents) if you want platform-enforced safety, a polished session UI and no infrastructure work. <strong>Build</strong> on Claude Code GitHub Actions if you want control over the prompt, the model and the memory layout, and are happy to own security.</p>
+<p>Building it yourself is quick: run <code>/install-github-app</code>, or install the app, add a secret and copy the example workflow. Either way you need repo admin rights. (<a href="https://code.claude.com/docs/en/github-actions#:~:text=For%20either%20path%2C%20you%20need%20admin%20access%20to%20the%20repository">Claude Code GitHub Actions</a>) You can sign in with an API key, or with an OAuth token from a Claude Pro, Max, Team or Enterprise plan. (<a href="https://code.claude.com/docs/en/github-actions#:~:text=available%20on%20Pro%2C%20Max%2C%20Team%2C%20and%20Enterprise%20plans">Claude Code GitHub Actions</a>) Teams on Bedrock or Vertex can use OIDC instead. One catch: in private org repos you can't assign an issue to Claude, because it isn't an org member, so use a label trigger instead. (<a href="https://github.com/anthropics/claude-code-action/blob/main/docs/faq.md#:~:text=you%20can%20only%20assign%20to%20users%20in%20your%20own%20organization">claude-code-action FAQ</a>)</p>
+<p><strong>Cost</strong> (prices as of 2026-10-06; check before relying on them):</p>
+<ul>
+<li><strong>DIY:</strong> each run uses GitHub Actions minutes plus model tokens, or your Claude subscription quota if you use OAuth. (<a href="https://code.claude.com/docs/en/github-actions#:~:text=Each%20run%20consumes%20two%20kinds%20of%20resources">Claude Code GitHub Actions</a>) Actions minutes are free for public repos and self-hosted runners. (<a href="https://docs.github.com/en/billing/concepts/product-billing/github-actions#:~:text=GitHub%20Actions%20usage%20is%20free%20for%20self%2Dhosted%20runners%20and">GitHub Actions billing</a>) Cap spend with <code>--max-turns</code>, job timeouts and concurrency limits.</li>
+<li><strong>Copilot:</strong> moved to usage-based "AI credits" on 2026-06-01, and long agent sessions on frontier models cost more. (<a href="https://docs.github.com/en/copilot/concepts/billing-and-usage/individuals/billing#:~:text=A%20long%20Copilot%20cloud%20agent%20session%20using%20a%20frontier%20model">Copilot usage-based billing for individuals</a>) Business is $19 per user per month with pooled credits. (<a href="https://docs.github.com/en/copilot/concepts/billing-and-usage/organizations-and-enterprises/seats-and-billing-cycles#:~:text=Copilot%20Business%20at%20%2419%20USD%20per%20user%20per%20month">Copilot seats and billing cycles</a>) The cloud agent also uses Actions minutes, so you pay the same two costs as DIY, bundled.</li>
+<li><strong>Devin:</strong> self-serve plans moved to quotas plus on-demand credits, while Enterprise is still billed in ACUs. (<a href="https://docs.devin.ai/admin/billing/self-serve#:~:text=On%2Ddemand%20credits%20are%20the%20same%20dollar%20value%20as%20the">Devin self-serve plans</a>)</li>
+<li><strong>Codex:</strong> cloud features come with ChatGPT plans. API-key access has no GitHub cloud integration. (<a href="https://developers.openai.com/codex/pricing#:~:text=No%20cloud%2Dbased%20features%20%28GitHub%20code%20review%2C%20Slack%2C%20etc.%29">Codex pricing</a>)</li>
+</ul>
+<h2 id="where-the-evidence-is-thin">Where the evidence is thin</h2>
+<ul>
+<li><strong>Pricing and product names change monthly.</strong> Every claim above was checked on 2026-10-06. Several products have been renamed or marked "legacy" in the past year, including Codex's GitHub cloud chats.</li>
+<li><strong>Copilot's PR-description checklist</strong> was described at launch in 2025, but today's docs only describe session logs. Don't depend on it.</li>
+<li><strong><code>claude-code-action</code> permissions:</strong> its docs say the official app asks for broad permissions, including workflows, while its FAQ says it lacks workflow write access. Use a custom app if this matters.</li>
+<li><strong>Rate limits:</strong> none of the docs gave numbers for how often agents can be triggered.</li>
+<li>The autonomy-levels framework comes from an academic paper, not from tool makers, so treat it as a lens, not a standard.</li>
+</ul>
+<h2 id="sources">Sources</h2>
+<ul>
+<li><a href="https://docs.github.com/en/copilot/concepts/copilot-surfaces/copilot-on-github">GitHub Copilot on GitHub.com</a> — What Copilot cloud agent is and its surfaces</li>
+<li><a href="https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/use-cloud-agent-on-github">Using GitHub Copilot cloud agent on GitHub</a> — Assigning issues to Copilot and how it reports back</li>
+<li><a href="https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/make-changes-to-an-existing-pr">Asking Copilot to make changes to an existing pull request</a> — @copilot feedback, sessions, batching</li>
+<li><a href="https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-cloud-agent">About Copilot cloud agent</a> — Limits: session time, one PR per task</li>
+<li><a href="https://docs.github.com/en/copilot/tutorials/coding-agent/get-the-best-results">Get the best results from Copilot cloud agent</a> — Writing issues for the agent; which tasks to give it</li>
+<li><a href="https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/research-plan-iterate">Research, plan, and iterate with Copilot cloud agent</a> — Plan-first flow before a PR</li>
+<li><a href="https://docs.github.com/en/copilot/concepts/security-governance-and-network-settings/risks-and-mitigations">Risks and mitigations for Copilot cloud agent</a> — Platform-enforced review and trigger rules</li>
+<li><a href="https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-the-firewall">Customizing the firewall for Copilot cloud agent</a> — Egress firewall scope</li>
+<li><a href="https://docs.github.com/en/copilot/concepts/billing-and-usage/individuals/billing">Copilot usage-based billing for individuals</a> — AI credits pricing</li>
+<li><a href="https://docs.github.com/en/copilot/concepts/billing-and-usage/organizations-and-enterprises/seats-and-billing-cycles">Copilot seats and billing cycles</a> — Business and Enterprise pricing</li>
+<li><a href="https://docs.github.com/en/billing/concepts/product-billing/github-actions">GitHub Actions billing</a> — Actions minutes and free quotas</li>
+<li><a href="https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows">Events that trigger workflows</a> — issue_comment and other event rules</li>
+<li><a href="https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/control-workflow-concurrency">Control the concurrency of workflows and jobs</a> — Concurrency groups and cancelled pending runs</li>
+<li><a href="https://code.claude.com/docs/en/github-actions">Claude Code GitHub Actions</a> — Setup, auth, cost and security for claude-code-action</li>
+<li><a href="https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md">claude-code-action usage</a> — Triggers, inputs and context</li>
+<li><a href="https://github.com/anthropics/claude-code-action/blob/main/docs/faq.md">claude-code-action FAQ</a> — Known limits and behaviours</li>
+<li><a href="https://github.com/anthropics/claude-code-action/blob/main/docs/security.md">claude-code-action security</a> — Who can trigger, prompt injection, PR policy</li>
+<li><a href="https://github.com/anthropics/claude-code-action/blob/main/src/github/data/fetcher.ts">claude-code-action fetcher.ts</a> — How the action filters comments by trigger time</li>
+<li><a href="https://github.com/anthropics/claude-code-action">anthropics/claude-code-action</a> — Project README</li>
+<li><a href="https://code.claude.com/docs/en/claude-code-on-the-web">Use Claude Code in the cloud</a> — Cloud sessions and PR auto-fix</li>
+<li><a href="https://code.claude.com/docs/en/headless">Run Claude Code programmatically</a> — Headless mode and session resume</li>
+<li><a href="https://code.claude.com/docs/en/memory">How Claude remembers your project</a> — CLAUDE.md and auto memory</li>
+<li><a href="https://code.claude.com/docs/en/best-practices">Best practices for Claude Code</a> — Plan, verify, review guidance</li>
+<li><a href="https://code.claude.com/docs/en/permission-modes">Choose a permission mode</a> — Plan mode and autonomy modes</li>
+<li><a href="https://code.claude.com/docs/en/sandboxing">Sandboxing - Claude Code</a> — Network allowlists</li>
+<li><a href="https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents">Effective harnesses for long-running agents</a> — Progress files and clean handoffs</li>
+<li><a href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents">Effective context engineering for AI agents</a> — Structured note-taking</li>
+<li><a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/memory-tool">Memory tool - Claude API</a> — File-based agent memory you control</li>
+<li><a href="https://www.anthropic.com/engineering/building-effective-agents">Building effective agents</a> — Checkpoints and human review for agents</li>
+<li><a href="https://www.anthropic.com/research/measuring-agent-autonomy">Measuring AI agent autonomy in practice</a> — How people oversee agents in practice</li>
+<li><a href="https://agents.md/">AGENTS.md</a> — Tool-neutral agent instructions file</li>
+<li><a href="https://linear.app/docs/agents-in-linear">Agents in Linear</a> — Delegating issues to agents</li>
+<li><a href="https://linear.app/developers/agent-interaction">Developing the Agent Interaction - Linear</a> — Agent sessions, webhooks, deadlines</li>
+<li><a href="https://linear.app/developers/agent-signals">Signals - Linear</a> — Stop and other signals</li>
+<li><a href="https://cursor.com/docs/cloud-agent">Cloud Agents - Cursor</a> — Cursor's async agents</li>
+<li><a href="https://cursor.com/docs/integrations/linear">Linear - Cursor Docs</a> — Delegating Linear issues to Cursor</li>
+<li><a href="https://docs.devin.ai/integrations/linear">Linear - Devin Docs</a> — Devin in Linear agent sessions</li>
+<li><a href="https://docs.devin.ai/admin/billing/self-serve">Devin self-serve plans</a> — Devin pricing model</li>
+<li><a href="https://support.atlassian.com/jira-software-cloud/docs/collaborate-on-work-items-with-ai-agents/">Collaborate on work items with AI agents - Jira</a> — Assigning and triggering agents in Jira</li>
+<li><a href="https://support.atlassian.com/jira-software-cloud/docs/generate-code-from-a-work-item-in-jira/">Generate code from a work item in Jira</a> — Jira Coding Agent</li>
+<li><a href="https://support.atlassian.com/jira-software-cloud/docs/set-up-claude-agent-for-jira/">Set up Claude Agent for Jira</a> — Claude in Jira (beta)</li>
+<li><a href="https://learn.chatgpt.com/docs/third-party/linear">Run Codex chats from Linear issues</a> — Codex in Linear</li>
+<li><a href="https://learn.chatgpt.com/guides/best-practices">Codex best practices</a> — Planning and AGENTS.md for Codex</li>
+<li><a href="https://developers.openai.com/codex/pricing">Codex pricing</a> — Codex plans and cloud features</li>
+<li><a href="https://knightcolumbia.org/content/levels-of-autonomy-for-ai-agents-1">Levels of Autonomy for AI Agents</a> — Five-level autonomy framework (Feng et al.)</li>
+<li><a href="https://simonwillison.net/2025/Oct/5/parallel-coding-agents/">Embracing the parallel coding agent lifestyle</a> — Review as the bottleneck</li>
+<li><a href="https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/">The lethal trifecta for AI agents</a> — Prompt injection risk model</li>
+<li><a href="https://invariantlabs.ai/blog/mcp-github-vulnerability">GitHub MCP Exploited</a> — Real issue-based prompt injection attack</li>
+<li><a href="https://addyosmani.com/blog/good-spec/">How to write a good spec for AI agents</a> — Specs and boundaries for agents</li>
+<li><a href="https://addyosmani.com/blog/code-review-ai/">AI writes code faster. Your job is still to prove it works.</a> — Reviewing AI-written PRs</li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.top", "navigation.sections", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

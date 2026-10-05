@@ -1,0 +1,35 @@
+site_name: Quan Notes
+site_url: https://tranquan.github.io/blog/
+docs_dir: content
+site_dir: site
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.top
+    - navigation.sections
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+  palette:
+    - scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+plugins:
+  - search
+  - blog
+  - tags
+
+nav:
+  - Home: index.md
+  - Blog: blog/index.md
+  - Articles: articles/index.md
+  - Collections: collections/index.md
+  - Notes: notes/index.md

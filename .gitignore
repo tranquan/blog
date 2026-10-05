@@ -1,0 +1,4 @@
+site/
+.ai-workspace/
+.venv/
+__pycache__/
